@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="39e59d2b-b053-4e27-98bc-6481b7cb6a2c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="hello-gitactionsFlow" doc:id="9929639c-6a80-4820-baa0-c1678245ae37" >
+		<http:listener doc:name="Listener" doc:id="8fa30164-a798-4c41-a575-bc278a81ae30" config-ref="HTTP_Listener_config" path="/githubactions"/>
+		<ee:transform doc:name="Transform Message" doc:id="a84a8990-ac92-4da2-8417-1298cbad4a69" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message:"Hello gihub Actions!"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="15a5853b-0eec-429b-af89-73c30f9dce5b" message="#[payload]"/>
+	</flow>
+</mule>
